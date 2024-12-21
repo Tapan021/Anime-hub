@@ -1,13 +1,18 @@
-document.getElementById('uploadForm').addEventListener('submit', function(event) {
-    event.preventDefault();
+document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
     const fileInput = document.getElementById('videoFile');
     const file = fileInput.files[0];
-    if (file) {
-        const videoPreview = document.getElementById('videoPreview');
-        const videoElement = document.createElement('video');
-        videoElement.src = URL.createObjectURL(file);
-        videoElement.controls = true;
-        videoPreview.innerHTML = '';
-        videoPreview.appendChild(videoElement);
+    const formData = new FormData();
+    formData.append('videoFile', file);
+
+    const response = await fetch('YOUR_CLOUD_STORAGE_UPLOAD_URL', {
+        method: 'POST',
+        body: formData
+    });
+
+    if (response.ok) {
+        alert('Video uploaded successfully!');
+    } else {
+        alert('Failed to upload video.');
     }
 });
